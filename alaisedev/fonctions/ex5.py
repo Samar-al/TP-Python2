@@ -2745,6 +2745,30 @@ def cats(list):
     breads = 0
     total_lifespan_min = 0
     total_lifespan_max = 0
+    all_attributes = set()
+
+    for cat in list:
+        all_attributes.update(cat.keys())
+
+    attribute_types = {}
+    for attr in all_attributes:
+        for cat in list:
+            if attr in cat:
+                value = cat[attr]
+                if isinstance(value, int):
+                    attribute_types[attr] = int
+                else:
+                    attribute_types[attr] = str
+                break
+
+    for cat in list:
+        for attr in all_attributes:
+            if attr not in cat:
+                if attribute_types.get(attr) == int:
+                    cat[attr] = 0
+                else:
+                    cat[attr] = "indéterminé"
+
     def get_name(item):
         print(f"Le nom du chat est : {item['name']}")
         return item['name']
@@ -2759,11 +2783,16 @@ def cats(list):
 
 
     for item in list:
+        all_attributes.update(item.keys())
         get_name(item)
         breads += 1
         get_life_span(item)
     print(f"L'espérance de vie moyenne des chats est comprise entre : {total_lifespan_min/breads} et {total_lifespan_max/breads} ans")
     print(f"Il y a {breads} espèces de chat")
+    print(f"Les attributs présents dans les données des chats sont : {', '.join(sorted(all_attributes))}")
+    print("\nDonnées complètes :")
+    for cat in list:
+        print(cat)
 
 
 cats(liste)
