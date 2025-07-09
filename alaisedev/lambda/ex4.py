@@ -41,10 +41,10 @@ eleves = [
     ("Manon Tessier", 1)
 ]
 
+# utilise sorted pour trier cette liste par note croissante
+# utilise sorted pour trier cette liste par ordre alphabetique du nom de famille
 
-# génére la liste des élèves ayant eu moins de 8
-
-at_least_eight = [eleve for eleve in eleves if eleve[1] < 8]
-print(at_least_eight)
-
-
+eleves_par_note = sorted(eleves, key=lambda eleve: eleve[1])
+print(eleves_par_note)
+eleves_par_nom_famille = sorted(eleves, key=lambda eleve: eleve[0].split(" ")[1])
+print(eleves_par_nom_famille)

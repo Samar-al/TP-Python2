@@ -1,3 +1,5 @@
+from functools import reduce
+
 eleves = [
     ("Karim Benali", 11),
     ("Ines Dubois", 9),
@@ -41,10 +43,17 @@ eleves = [
     ("Manon Tessier", 1)
 ]
 
+# utilise cette liste pour créer un dictionnaire où la clé est la note et la valeur la liste des "prénom nom" ayant eu cette note
+# exemple {..., 19 : ["Victor Perrin", "Camille Robert"]
 
-# génére la liste des élèves ayant eu moins de 8
+notes_dict = {}
 
-at_least_eight = [eleve for eleve in eleves if eleve[1] < 8]
-print(at_least_eight)
+for nom, note in eleves:
+    if note not in notes_dict:
+        notes_dict[note] = []
+    notes_dict[note].append(nom)
 
+# Affichage
+for note in sorted(notes_dict.keys()):
+    print(f"{note} : {notes_dict[note]}")
 
