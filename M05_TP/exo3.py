@@ -1,6 +1,6 @@
 #Ecosystème
 import random
-a1 = "animal1"
+"""a1 = "animal1"
 a2 = "animal2"
 a3 = "animal3"
 
@@ -31,19 +31,20 @@ elif predators > 0 and others > preys:
     ecosystem[1][1] = predator
 
 for row in ecosystem:
-    print(row)
+    print(row)"""
 
 # niveau 2
-
+# je crée la grille de l'ecosysteme de taille où chaque case contient aléatoirement 1, 2 ou 3.
 def create_ecosystem(n):
     return [[random.randint(1,3) for i in range(n)] for j in range(n)]
-
+# je définis qui mange qui
 food_chain = {
     1: 2,
     2: 3,
     3: 1
 }
 
+# je renvoi  les 8 voisins d'une cellule en position x et y, d'un ecosysteme que je fournis.
 def get_neighbors(ecosystem, x, y):
     neighbors = []
     n = len(ecosystem)
@@ -53,3 +54,42 @@ def get_neighbors(ecosystem, x, y):
                 neighbors.append(ecosystem[i][j])
     return neighbors
 
+#je mets à jour la cellule en fonction de sa valeur (l'animal), du nombre de prédateur et du nombre de proie qui l'entour.
+def update_cell(value, neighbors, food_chain):
+    predator = [k for k, v in food_chain.items() if v == value][0]
+    prey = food_chain[value]
+    count_predator = neighbors.count(predator)
+    count_prey = neighbors.count(prey)
+    others = len(neighbors) - count_predator - count_prey
+
+    if count_predator > max(count_prey, others):
+        return predator
+    elif count_predator == count_prey and count_predator > 0:
+        return predator if random.random() < 0.5 else value
+    elif count_predator > 0 and others > count_prey:
+        return predator
+    else:
+        return value
+# je mets à jour toute l'ecosysteme.
+def update_ecosystem(ecosystem, food_chain):
+    n = len(ecosystem)
+    new_ecosystem = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            neighbors = get_neighbors(ecosystem, i, j)
+            new_ecosystem[i][j] = update_cell(ecosystem[i][j], neighbors, food_chain)
+    return new_ecosystem
+
+#test
+n = 10
+ecosystem = create_ecosystem(n)
+
+print("Avant :")
+for ligne in ecosystem:
+    print(ligne)
+
+ecosystem = update_ecosystem(ecosystem, food_chain)
+
+print("\nAprès :")
+for ligne in ecosystem:
+    print(ligne)
